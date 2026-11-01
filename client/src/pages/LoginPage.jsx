@@ -10,6 +10,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 import Card from '../components/Card';
+import API from '../api';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -51,23 +52,23 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const response = await fetch('/api/auth/resend-verification', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
+      const response = await API.post('/api/auth/resend-verification', {
+        email
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Could not send verification email.');
-      }
+      const result = response.data;
 
       setResendMessage(
+        result.message ||
         'If your account needs verification, a new email will be sent.'
       );
     } catch (err) {
-      setError(err.message || 'Could not resend verification email.');
+      setError(
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        err.message ||
+        'Could not resend verification email.'
+      );
     } finally {
       setResending(false);
     }
@@ -85,7 +86,6 @@ export default function LoginPage() {
         alignItems: 'stretch'
       }}
     >
-      {/* Left Branding Side */}
       <div
         style={{
           backgroundColor: 'var(--color-forest)',
@@ -144,7 +144,6 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right Login Form */}
       <Card style={{ padding: '2.5rem' }}>
         <h2
           style={{

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api';
 import { Upload, FileText, CheckCircle2, AlertCircle, Trash2, ArrowRight, ArrowLeft, Play } from 'lucide-react';
 import Card from '../components/Card';
 import StepIndicator from '../components/StepIndicator';
@@ -41,7 +41,7 @@ export default function NewAnalysisWizard() {
       const formData = new FormData();
       formData.append('resume', selectedFile);
 
-      const res = await axios.post('/api/resumes/upload', formData, {
+      const res = await API.post('/api/resumes/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
@@ -80,7 +80,7 @@ export default function NewAnalysisWizard() {
     setStep(4); // Show Loading State
 
     try {
-      const res = await axios.post('/api/analysis/create', {
+      const res = await API.post('/api/analysis/create', {
         resumeId: resumeRecord.id,
         jobTitle: jobTitle || 'Target Role',
         jdText

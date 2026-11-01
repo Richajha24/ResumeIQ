@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../api';
 import { useAuth } from '../context/AuthContext';
 import { Shield, Users, BarChart3, FileCheck, Award, Lock, Search } from 'lucide-react';
 import Card from '../components/Card';
@@ -32,8 +32,8 @@ export default function AdminDashboard() {
     try {
       setLoading(true);
       const [statsRes, usersRes] = await Promise.all([
-        axios.get('/api/admin/stats'),
-        axios.get('/api/admin/users')
+        API.get('/api/admin/stats'),
+        API.get('/api/admin/users')
       ]);
 
       if (statsRes.data.success) {

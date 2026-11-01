@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api';
 import { Download, RefreshCw, AlertTriangle, CheckCircle2, Sparkles, FileText, ArrowLeft, ShieldCheck, Share2 } from 'lucide-react';
 import Card from '../components/Card';
 import ScoreCircle from '../components/ScoreCircle';
@@ -22,7 +22,7 @@ export default function AnalysisResultsPage() {
   const fetchAnalysis = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`/api/analysis/${id}`);
+      const res = await API.get(`/api/analysis/${id}`);
       if (res.data.success) {
         setAnalysis(res.data.analysis);
       } else {
@@ -38,7 +38,7 @@ export default function AnalysisResultsPage() {
   const handleDownloadReport = async () => {
     try {
       setDownloading(true);
-      const response = await axios.get(`/api/reports/${id}`, {
+      const response = await API.get(`/api/reports/${id}`, {
         responseType: 'blob'
       });
 

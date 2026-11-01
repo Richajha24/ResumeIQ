@@ -2,8 +2,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { User, Mail, Lock, Phone, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react';
+import {
+  AlertCircle,
+  ArrowRight,
+  CheckCircle
+} from 'lucide-react';
 import Card from '../components/Card';
+import API from '../api';
 
 export default function RegisterPage() {
   const [fullName, setFullName] = useState('');
@@ -50,21 +55,23 @@ export default function RegisterPage() {
     setError('');
 
     try {
-      const response = await fetch('/api/auth/resend-verification', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
+      const response = await API.post('/api/auth/resend-verification', {
+        email
       });
 
-      const result = await response.json();
+      const result = response.data;
 
-      if (!response.ok) {
-        throw new Error(result.error || 'Could not resend verification email.');
-      }
-
-      setResendMessage('If your account needs verification, a new email has been sent.');
+      setResendMessage(
+        result.message ||
+        'If your account needs verification, a new email has been sent.'
+      );
     } catch (err) {
-      setError(err.message || 'Could not resend verification email.');
+      setError(
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        err.message ||
+        'Could not resend verification email.'
+      );
     } finally {
       setResending(false);
     }
@@ -72,11 +79,24 @@ export default function RegisterPage() {
 
   if (registered) {
     return (
-      <div className="animate-fade-in" style={{ maxWidth: '520px', margin: '2rem auto' }}>
+      <div
+        className="animate-fade-in"
+        style={{ maxWidth: '520px', margin: '2rem auto' }}
+      >
         <Card style={{ padding: '2.5rem', textAlign: 'center' }}>
-          <CheckCircle size={48} color="var(--color-forest)" style={{ marginBottom: '1rem' }} />
+          <CheckCircle
+            size={48}
+            color="var(--color-forest)"
+            style={{ marginBottom: '1rem' }}
+          />
 
-          <h2 style={{ fontSize: '1.8rem', color: 'var(--color-forest)', marginBottom: '0.75rem' }}>
+          <h2
+            style={{
+              fontSize: '1.8rem',
+              color: 'var(--color-forest)',
+              marginBottom: '0.75rem'
+            }}
+          >
             Check your inbox
           </h2>
 
@@ -84,25 +104,42 @@ export default function RegisterPage() {
             Your account has been created. We sent a verification link to:
           </p>
 
-          <p style={{ fontWeight: 600, margin: '1rem 0', overflowWrap: 'anywhere' }}>
+          <p
+            style={{
+              fontWeight: 600,
+              margin: '1rem 0',
+              overflowWrap: 'anywhere'
+            }}
+          >
             {email}
           </p>
 
           {emailSent ? (
             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-              Open the email and click <strong>Verify Email</strong> to activate your account.
-              The link expires in 24 hours.
+              Open the email and click <strong>Verify Email</strong> to
+              activate your account. The link expires in 24 hours.
             </p>
           ) : (
             <p style={{ color: 'var(--color-brick)', fontSize: '0.9rem' }}>
-              Your account was created, but the email could not be sent. Please try resending it.
+              Your account was created, but the email could not be sent.
+              Please try resending it.
             </p>
           )}
 
-          {error && <p style={{ color: 'var(--color-brick)', marginTop: '1rem' }}>{error}</p>}
+          {error && (
+            <p style={{ color: 'var(--color-brick)', marginTop: '1rem' }}>
+              {error}
+            </p>
+          )}
 
           {resendMessage && (
-            <p style={{ color: 'var(--color-forest)', marginTop: '1rem', fontSize: '0.9rem' }}>
+            <p
+              style={{
+                color: 'var(--color-forest)',
+                marginTop: '1rem',
+                fontSize: '0.9rem'
+              }}
+            >
               {resendMessage}
             </p>
           )}
@@ -112,13 +149,29 @@ export default function RegisterPage() {
             className="btn btn-primary"
             onClick={handleResend}
             disabled={resending}
-            style={{ width: '100%', marginTop: '1.5rem', padding: '0.85rem' }}
+            style={{
+              width: '100%',
+              marginTop: '1.5rem',
+              padding: '0.85rem'
+            }}
           >
             {resending ? 'Sending...' : 'Resend Verification Email'}
           </button>
 
-          <p style={{ marginTop: '1.5rem', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-            Already verified? <Link to="/login" style={{ color: 'var(--color-brick)', fontWeight: 600 }}>Sign in</Link>
+          <p
+            style={{
+              marginTop: '1.5rem',
+              fontSize: '0.9rem',
+              color: 'var(--color-text-muted)'
+            }}
+          >
+            Already verified?{' '}
+            <Link
+              to="/login"
+              style={{ color: 'var(--color-brick)', fontWeight: 600 }}
+            >
+              Sign in
+            </Link>
           </p>
         </Card>
       </div>
@@ -126,29 +179,47 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: '520px', margin: '2rem auto' }}>
+    <div
+      className="animate-fade-in"
+      style={{ maxWidth: '520px', margin: '2rem auto' }}
+    >
       <Card style={{ padding: '2.5rem' }}>
-        <h2 style={{ fontSize: '1.8rem', marginBottom: '0.25rem', color: 'var(--color-forest)' }}>
+        <h2
+          style={{
+            fontSize: '1.8rem',
+            marginBottom: '0.25rem',
+            color: 'var(--color-forest)'
+          }}
+        >
           Create Candidate Account
         </h2>
 
-        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '1.75rem' }}>
-          Register to evaluate resumes against target job descriptions and track score history.
+        <p
+          style={{
+            color: 'var(--color-text-muted)',
+            fontSize: '0.9rem',
+            marginBottom: '1.75rem'
+          }}
+        >
+          Register to evaluate resumes against target job descriptions
+          and track score history.
         </p>
 
         {error && (
-          <div style={{
-            backgroundColor: 'var(--color-brick-light)',
-            border: '1px solid rgba(164, 61, 53, 0.3)',
-            color: 'var(--color-brick)',
-            padding: '0.75rem 1rem',
-            borderRadius: 'var(--radius-sm)',
-            fontSize: '0.875rem',
-            marginBottom: '1.25rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem'
-          }}>
+          <div
+            style={{
+              backgroundColor: 'var(--color-brick-light)',
+              border: '1px solid rgba(164, 61, 53, 0.3)',
+              color: 'var(--color-brick)',
+              padding: '0.75rem 1rem',
+              borderRadius: 'var(--radius-sm)',
+              fontSize: '0.875rem',
+              marginBottom: '1.25rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}
+          >
             <AlertCircle size={16} /> {error}
           </div>
         )}
@@ -206,22 +277,32 @@ export default function RegisterPage() {
             type="submit"
             disabled={submitting}
             className="btn btn-primary"
-            style={{ width: '100%', marginTop: '1.25rem', padding: '0.85rem' }}
+            style={{
+              width: '100%',
+              marginTop: '1.25rem',
+              padding: '0.85rem'
+            }}
           >
-            {submitting ? 'Creating Account...' : 'Create Account'} <ArrowRight size={16} />
+            {submitting ? 'Creating Account...' : 'Create Account'}
+            <ArrowRight size={16} />
           </button>
         </form>
 
-        <div style={{
-          marginTop: '1.75rem',
-          textAlign: 'center',
-          fontSize: '0.9rem',
-          color: 'var(--color-text-muted)',
-          borderTop: '1px solid var(--color-border)',
-          paddingTop: '1.25rem'
-        }}>
+        <div
+          style={{
+            marginTop: '1.75rem',
+            textAlign: 'center',
+            fontSize: '0.9rem',
+            color: 'var(--color-text-muted)',
+            borderTop: '1px solid var(--color-border)',
+            paddingTop: '1.25rem'
+          }}
+        >
           Already registered?{' '}
-          <Link to="/login" style={{ fontWeight: 600, color: 'var(--color-brick)' }}>
+          <Link
+            to="/login"
+            style={{ fontWeight: 600, color: 'var(--color-brick)' }}
+          >
             Sign In Here
           </Link>
         </div>

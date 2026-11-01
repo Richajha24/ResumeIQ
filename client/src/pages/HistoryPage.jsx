@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api';
 import { Search, Download, ExternalLink, Trash2, Calendar, FileText, PlusCircle } from 'lucide-react';
 import Card from '../components/Card';
 import Badge from '../components/Badge';
@@ -18,7 +18,7 @@ export default function HistoryPage() {
   const fetchHistory = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('/api/analysis');
+      const res = await API.get('/api/analysis');
       if (res.data.success) {
         setAnalyses(res.data.analyses || []);
       }
@@ -34,7 +34,7 @@ export default function HistoryPage() {
     if (!window.confirm('Are you sure you want to delete this analysis entry?')) return;
 
     try {
-      await axios.delete(`/api/analysis/${id}`);
+      await API.delete(`/api/analysis/${id}`);
       setAnalyses(analyses.filter(a => a._id !== id));
     } catch (err) {
       alert('Failed to delete analysis: ' + err.message);
@@ -44,7 +44,7 @@ export default function HistoryPage() {
   const handleDownload = async (id, jobTitle, e) => {
     e.stopPropagation();
     try {
-      const response = await axios.get(`/api/reports/${id}`, { responseType: 'blob' });
+      const response = await API.get(`/api/reports/${id}`, { responseType: 'blob' });
       const blob = new Blob([response.data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');

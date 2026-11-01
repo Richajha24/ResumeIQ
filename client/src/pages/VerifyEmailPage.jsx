@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { CheckCircle, AlertCircle, Loader } from 'lucide-react';
 import Card from '../components/Card';
+import API from '../api';
 
 export default function VerifyEmailPage() {
     const [searchParams] = useSearchParams();
@@ -22,23 +23,26 @@ export default function VerifyEmailPage() {
             }
 
             try {
-                const response = await fetch('/api/auth/verify-email', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token, email })
+                const response = await API.post('/api/auth/verify-email', {
+                    token,
+                    email
                 });
 
-                const result = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(result.error || 'Email verification failed.');
-                }
+                const result = response.data;
 
                 setStatus('success');
-                setMessage(result.message || 'Your email has been verified successfully.');
+                setMessage(
+                    result.message ||
+                    'Your email has been verified successfully.'
+                );
             } catch (error) {
                 setStatus('error');
-                setMessage(error.message || 'Unable to verify your email.');
+                setMessage(
+                    error.response?.data?.error ||
+                    error.response?.data?.message ||
+                    error.message ||
+                    'Unable to verify your email.'
+                );
             }
         };
 
@@ -46,10 +50,13 @@ export default function VerifyEmailPage() {
     }, [searchParams]);
 
     return (
-        <div className="animate-fade-in" style={{
-            maxWidth: '520px',
-            margin: '3rem auto'
-        }}>
+        <div
+            className="animate-fade-in"
+            style={{
+                maxWidth: '520px',
+                margin: '3rem auto'
+            }}
+        >
             <Card style={{ padding: '2.5rem', textAlign: 'center' }}>
 
                 {status === 'loading' && (
@@ -91,11 +98,13 @@ export default function VerifyEmailPage() {
                     </>
                 )}
 
-                <p style={{
-                    color: 'var(--color-text-muted)',
-                    lineHeight: 1.7,
-                    margin: '1rem 0 1.5rem'
-                }}>
+                <p
+                    style={{
+                        color: 'var(--color-text-muted)',
+                        lineHeight: 1.7,
+                        margin: '1rem 0 1.5rem'
+                    }}
+                >
                     {message}
                 </p>
 

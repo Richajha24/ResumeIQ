@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
 import Card from '../components/Card';
+import API from '../api';
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState('');
@@ -18,22 +19,21 @@ export default function ForgotPasswordPage() {
         setLoading(true);
 
         try {
-            const response = await fetch('/api/auth/forgot-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email })
+            const response = await API.post('/api/auth/forgot-password', {
+                email
             });
 
-            const result = await response.json();
+            const result = response.data;
 
-            if (!response.ok) {
-                throw new Error(result.error || 'Unable to process request.');
-            }
-
-            setMessage(result.message);
+            setMessage(result.message || 'If your account is eligible, a reset link will be sent.');
             setSubmitted(true);
         } catch (err) {
-            setError(err.message || 'Something went wrong.');
+            setError(
+                err.response?.data?.error ||
+                err.response?.data?.message ||
+                err.message ||
+                'Something went wrong.'
+            );
         } finally {
             setLoading(false);
         }

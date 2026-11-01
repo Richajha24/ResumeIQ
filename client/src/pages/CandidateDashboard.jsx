@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../api';
 import { useAuth } from '../context/AuthContext';
 import { PlusCircle, Search, FileText, BarChart3, Award, ArrowUpRight, Calendar, CheckCircle2 } from 'lucide-react';
 import Card from '../components/Card';
@@ -23,8 +23,8 @@ export default function CandidateDashboard() {
     try {
       setLoading(true);
       const [anlRes, resRes] = await Promise.all([
-        axios.get('/api/analysis'),
-        axios.get('/api/resumes')
+        API.get('/api/analysis'),
+        API.get('/api/resumes')
       ]);
 
       if (anlRes.data.success) {

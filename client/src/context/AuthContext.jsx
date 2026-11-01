@@ -1,9 +1,10 @@
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
+import API from '../api';
+API.defaults.baseURL = import.meta.env.VITE_API_URL || '';
 
 const AuthContext = createContext();
+
 
 const getErrorMessage = (err, fallback) => {
   return err.response?.data?.error || err.response?.data?.message || err.message || fallback;
@@ -16,11 +17,11 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       localStorage.setItem('resumeiq_token', token);
       fetchCurrentUser();
     } else {
-      delete axios.defaults.headers.common['Authorization'];
+      delete API.defaults.headers.common['Authorization'];
       localStorage.removeItem('resumeiq_token');
       setUser(null);
       setLoading(false);
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchCurrentUser = async () => {
     try {
-      const res = await axios.get('/api/auth/me');
+      const res = await API.get('/api/auth/me');
 
       if (res.data.success) {
         setUser(res.data.user);
@@ -44,7 +45,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const res = await axios.post('/api/auth/login', { email, password });
+      const res = await API.post('/api/auth/login', { email, password });
 
       if (res.data.success) {
         setToken(res.data.token);
@@ -63,7 +64,7 @@ export const AuthProvider = ({ children }) => {
   // Registration now creates an account but does not log the user in.
   const register = async (fullName, email, password, mobile) => {
     try {
-      const res = await axios.post('/api/auth/register', {
+      const res = await API.post('/api/auth/register', {
         fullName,
         email,
         password,
