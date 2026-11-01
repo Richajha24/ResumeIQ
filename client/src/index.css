@@ -1,0 +1,268 @@
+/* ==========================================================================
+   RESUMEIQ DESIGN SYSTEM & TOKENS
+   Primary background: Warm Ivory / Cream #F3EBDD
+   Primary dark: Deep Forest Green #2F4034
+   Secondary accent: Muted Brick Red #A43D35
+   Highlight: Muted Mustard / Warm Gold #D6A83D
+   Card background: Soft Off-White #FAF7EF
+   Main text: Deep Charcoal / Forest #263329
+   Secondary text: Muted Gray-Green #697067
+   Borders: Soft Beige #DDD5C5
+   ========================================================================== */
+
+:root {
+  --color-bg: #F3EBDD;
+  --color-forest: #2F4034;
+  --color-forest-hover: #223027;
+  --color-forest-light: #3D5244;
+  --color-brick: #A43D35;
+  --color-brick-light: #FAF0EF;
+  --color-gold: #D6A83D;
+  --color-card: #FAF7EF;
+  --color-text-main: #263329;
+  --color-text-muted: #697067;
+  --color-border: #DDD5C5;
+  --color-border-dark: #C9BEAC;
+  --color-white: #FFFFFF;
+
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  --shadow-subtle: 0 4px 16px rgba(47, 64, 52, 0.04);
+  --shadow-card: 0 6px 20px rgba(38, 51, 41, 0.06);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--color-forest);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--color-brick);
+}
+
+h1, h2, h3, .font-serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  color: var(--color-forest);
+  line-height: 1.25;
+}
+
+/* Layout Utilities */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background-color: var(--color-forest);
+  color: var(--color-card);
+  border-color: var(--color-forest);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-forest-hover);
+  border-color: var(--color-forest-hover);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-forest);
+  border-color: var(--color-border-dark);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(47, 64, 52, 0.05);
+  border-color: var(--color-forest);
+}
+
+.btn-accent {
+  background-color: var(--color-brick);
+  color: #FFFFFF;
+}
+
+.btn-accent:hover {
+  background-color: #8C332B;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+}
+
+.btn-lg {
+  padding: 0.9rem 2rem;
+  font-size: 1.05rem;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Off-White Cards */
+.card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-card);
+}
+
+.card-sm {
+  padding: 1.25rem;
+}
+
+/* Badges & Chips */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.825rem;
+  font-weight: 500;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-forest);
+}
+
+.badge-brick {
+  background-color: var(--color-brick-light);
+  border-color: rgba(164, 61, 53, 0.25);
+  color: var(--color-brick);
+}
+
+.badge-forest {
+  background-color: rgba(47, 64, 52, 0.08);
+  border-color: rgba(47, 64, 52, 0.2);
+  color: var(--color-forest);
+}
+
+.badge-gold {
+  background-color: rgba(214, 168, 61, 0.12);
+  border-color: rgba(214, 168, 61, 0.35);
+  color: #8A6517;
+}
+
+/* Form Controls */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-forest);
+}
+
+.form-input, .form-textarea, .form-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--color-text-main);
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  border-color: var(--color-forest);
+  box-shadow: 0 0 0 3px rgba(47, 64, 52, 0.1);
+}
+
+.form-textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-dark);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-forest-light);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pulseSlow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse {
+  animation: pulseSlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
