@@ -2,6 +2,38 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async ({ to, subject, html, text }) => {
+    if (process.env.RESEND_API_KEY) {
+        const from = process.env.EMAIL_FROM;
+
+        if (!from) {
+            throw new Error('EMAIL_FROM is required when using Resend');
+        }
+
+        const response = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                from,
+                to: [to],
+                subject,
+                html,
+                text
+            })
+        });
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.message || `Resend API request failed with status ${response.status}`
+            );
+        }
+
+        return result;
+    }
+
     const requiredEnv = [
         'EMAIL_HOST',
         'EMAIL_PORT',
